@@ -19,7 +19,7 @@ Example Responses:
   Response:
   {
     "status": 200,
-    "message": "OK: The request has succeeded. The meaning of this status depends on the HTTP method used."
+    "message": "OK: The request has succeeded. The meaning xof this status depends on the HTTP method used."
   }
 
 - For 404 (Not Found):
@@ -49,6 +49,38 @@ Example Responses:
 List of Status Codes to Handle:
 200, 201, 204, 400, 401, 403, 404, 405, 429, 500, 502, 503, 504
 */
+
+
+const statusDes = {
+  200: "OK Request was successful.",
+    201: "Created A resource has been successfully created.",
+    204: "No Content Request processed successfully, no content returned",
+    400: "Bad Request The request is invalid due to client-side errors",
+    401: "Unauthorized Authentication is required to access the resource.",
+    403: "Forbidden Server refuses to authorize the request",
+    404: "Not Found The resource does not exist",
+    405: "Method Not Allowed HTTP method not supported for this resource.",
+    429: "Too Many Requests User has exceeded rate limits.",
+    500: "Internal Server Error: The server encountered an error",
+    502: "Bad Gateway: The server received an invalid response from the upstream server",
+    503: "Service Unavailable: Server temporarily overloaded or under maintenance",
+    504: "Gateway Timeout: The server did not receive a timely response from the upstream serve"
+
+}
+
+app.get( '/status-info',(req,res)=>{
+  const code =parseInt(req.query.code,10)
+
+  if (!code || !statusDes[code]){
+    return res.status(400).json({
+      error: 'The server has not found anything matching the request URI. This is often caused by a missing page or resource'
+    })
+  }
+  res.json({
+    status : code,
+    message : statusDes[code]
+  })
+})
 
 const PORT = 3000;
 app.listen(PORT, () => {
